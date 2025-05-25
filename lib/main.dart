@@ -136,52 +136,104 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gestor de Ordenadores',
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: const HomePage(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _paginaActual = 0;
+
+  final List<Widget> _pages = [InicioPage(), ListPage()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Gestor de Ordenadores')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ElevatedButton.icon(
-              icon: const Icon(Icons.desktop_windows_outlined),
-              label: const Text('Crear Gaming'),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ConfigPage(tipo: 'Gaming')),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.laptop_windows_outlined),
-              label: const Text('Crear Ofimática'),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ConfigPage(tipo: 'Ofimática')),
-              ),
-            ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              child: const Text('Ver Pedidos'),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ListPage()),
-              ),
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: _pages[_paginaActual],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _paginaActual,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_bag),
+            label: "Pedidos",
+          ),
+        ],
+        onTap: (int index) {
+          setState(() {
+            _paginaActual = index;
+          });
+        },
       ),
     );
   }
 }
+
+
+// Página de inicio con dos tarjetas
+class InicioPage extends StatelessWidget {
+  void _navigateToPersonalizacion(BuildContext context, String producto) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfigPage(tipo: producto),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        GestureDetector(
+          onTap: () => _navigateToPersonalizacion(context, 'Gaming'),
+          child: Card(
+            child: ListTile(
+              leading: Icon(Icons.desktop_windows_outlined),
+              title: Text('Ordenador Gaming'),
+              subtitle: Text('Desde: 800€'),
+            ),
+          ),
+        ),
+        SizedBox(height: 16),
+        GestureDetector(
+          onTap:
+              () => _navigateToPersonalizacion(context, 'Ofimática'),
+          child: Card(
+            child: ListTile(
+              leading: Icon(Icons.laptop_windows_outlined),
+              title: Text('Ordenador Ofimatica'),
+              subtitle: Text('Desde 250€'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Página de pedidos (vacía por ahora)
+class PedidosPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Pedidos', style: TextStyle(fontSize: 24)));
+  }
+}
+
 
 class ConfigPage extends StatefulWidget {
   final String tipo;
@@ -223,19 +275,20 @@ class _ConfigPageState extends State<ConfigPage> {
       'Ofimática': OpcionesProducto(
         Icons.laptop_windows_outlined,
         [
-          Pieza(id: 10, nombre: 'Core i3', tipo: 'procesador', precio: 80),
-          Pieza(id: 11, nombre: 'Core i5', tipo: 'procesador', precio: 120),
+          Pieza(id: 10, nombre: 'intel core i3 14100F', tipo: 'procesador', precio: 60),
+          Pieza(id: 11, nombre: 'Ryzen 5 3400G', tipo: 'procesador', precio: 65),
+          Pieza(id: 12, nombre: 'Ryzen 5 5600G', tipo: 'procesador', precio: 130)
         ],
         [
-          Pieza(id: 12, nombre: '8GB', tipo: 'RAM', precio: 50),
-          Pieza(id: 13, nombre: '16GB', tipo: 'RAM', precio: 80),
+          Pieza(id: 13, nombre: '8GB', tipo: 'RAM', precio: 50),
+          Pieza(id: 14, nombre: '16GB', tipo: 'RAM', precio: 80),
         ],
         [
-          Pieza(id: 14, nombre: '256GB', tipo: 'almacenamiento', precio: 60),
-          Pieza(id: 15, nombre: '512GB', tipo: 'almacenamiento', precio: 90),
+          Pieza(id: 15, nombre: '256GB', tipo: 'almacenamiento', precio: 60),
+          Pieza(id: 16, nombre: '512GB', tipo: 'almacenamiento', precio: 90),
         ],
         [
-          Pieza(id: 16, nombre: 'Integrada', tipo: 'grafica', precio: 0),
+          Pieza(id: 17, nombre: 'Integrada', tipo: 'grafica', precio: 0),
         ],
       ),
     };
