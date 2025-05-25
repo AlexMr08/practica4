@@ -75,7 +75,7 @@ void main() {
     expect(deleted, false);
   });
 
-  test('RF6: El descuento se evalua correctamente (porcentual)', () {
+  test('RF6: El descuento se selecciona correctamente (porcentual)', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
@@ -88,7 +88,7 @@ void main() {
         closeTo(o.calcularPrecioSinDescuento() * 0.9, 0.01));
   });
 
-  test('RF6: El descuento se evalua correctamente (fijo)', () {
+  test('RF6: El descuento se selecciona correctamente (fijo)', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
