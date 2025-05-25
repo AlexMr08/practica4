@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import 'pieza.dart';
+import 'piezas.dart';
 
 class Ordenador {
   final CPU cpu;
