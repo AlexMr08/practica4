@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:practica4/logic/ordenador_builder.dart';
-//import 'api.dart';
+import 'api.dart';
 import './logic/piezas.dart';
 import './logic/ordenador.dart';
 import 'logic/ordenador_decorator.dart';
@@ -459,17 +459,15 @@ class _ConfigPageState extends State<ConfigPage> {
                     ordenador = DescuentoFijoDecorator(ordenador, 50);
                   }
                 }
-                //await _api.createOrdenador(nuevo);
-                lista.add(ordenador);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Ordenador creado:\nCPU: ${ordenador.cpu.nombre}\nRAM: ${ordenador.ram.nombre}\nAlmacenamiento: ${ordenador.almacenamiento.nombre}\nGPU: ${ordenador.gpu?.nombre ?? "N/A"}\nPrecio: \$${ordenador.calcularPrecioFinal().toStringAsFixed(2)}',
-                    ),
-                    duration: Duration(seconds: 3),
-                  ),
-                );
-                Navigator.pop(context);
+                final ok = await Api.createOrdenador(ordenador);
+                if (ok) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('Pedido enviado')));
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('Error al enviar pedido')));
+                }
               },
               child: const Text('Realizar Pedido'),
             ),
