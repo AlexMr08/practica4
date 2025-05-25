@@ -1,9 +1,9 @@
 import 'package:test/test.dart';
-import '../lib/piezas.dart';
-import '../lib/ordenador.dart';
-import '../lib/ordenador_builder.dart';
-import '../lib/descuento_decorator.dart';
-import '../api.dart';
+import '../lib/logic/piezas.dart';
+import '../lib/logic/ordenador.dart';
+import '../lib/logic/ordenador_builder.dart';
+import '../lib/logic/ordenador_decorator.dart';
+import '../lib/api.dart';
 
 void main() {
   late Api _api;
