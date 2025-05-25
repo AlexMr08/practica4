@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:practica4/logic/ordenador_builder.dart';
 import 'api.dart';
@@ -6,130 +8,6 @@ import './logic/ordenador.dart';
 import 'logic/ordenador_decorator.dart';
 
 typedef Json = Map<String, dynamic>;
-
-// Modelo Pieza
-// class Pieza {
-//   final int id;
-//   final String nombre;
-//   final String tipo;
-//   final double precio;
-//
-//   Pieza({
-//     required this.id,
-//     required this.nombre,
-//     required this.tipo,
-//     required this.precio,
-//   });
-//
-//   factory Pieza.fromJson(Json json) {
-//     final rawPrecio = json['precio'];
-//     double parsedPrecio;
-//     if (rawPrecio is num) {
-//       parsedPrecio = rawPrecio.toDouble();
-//     } else if (rawPrecio is String) {
-//       parsedPrecio = double.tryParse(rawPrecio) ?? 0.0;
-//     } else {
-//       parsedPrecio = 0.0;
-//     }
-//     return Pieza(
-//       id: json['id'] as int,
-//       nombre: json['nombre'] as String,
-//       tipo: json['tipo'] as String,
-//       precio: parsedPrecio,
-//     );
-//   }
-//
-//   Json toJson() => {
-//     'nombre': nombre,
-//     'tipo': tipo,
-//     'precio': precio,
-//   };
-//
-//   @override
-//   bool operator ==(Object other) =>
-//       identical(this, other) ||
-//           other is Pieza && runtimeType == other.runtimeType && id == other.id;
-//
-//   @override
-//   int get hashCode => id.hashCode;
-// }
-//
-// // Modelo Ordenador
-// class Ordenador {
-//   final int? id;
-//   final String tipo;
-//   final Pieza procesador;
-//   final Pieza memoria;
-//   final Pieza almacenamiento;
-//   final Pieza grafica;
-//   final double precio;
-//   bool pagado;
-//
-//   Ordenador({
-//     this.id,
-//     required this.tipo,
-//     required this.procesador,
-//     required this.memoria,
-//     required this.almacenamiento,
-//     required this.grafica,
-//     required this.precio,
-//     this.pagado = false,
-//   });
-//
-//   factory Ordenador.fromJson(Json json) {
-//     // Parse precio robustamente
-//     final rawPrecio = json['precio'];
-//     double parsedPrecio;
-//     if (rawPrecio is num) {
-//       parsedPrecio = rawPrecio.toDouble();
-//     } else if (rawPrecio is String) {
-//       parsedPrecio = double.tryParse(rawPrecio) ?? 0.0;
-//     } else {
-//       parsedPrecio = 0.0;
-//     }
-//     // Parse pagado con fallback a false
-//     final rawPagado = json['pagado'];
-//     bool parsedPagado;
-//     if (rawPagado is bool) {
-//       parsedPagado = rawPagado;
-//     } else if (rawPagado is String) {
-//       parsedPagado = rawPagado.toLowerCase() == 'true';
-//     } else {
-//       parsedPagado = false;
-//     }
-//     // Parse piezas array
-//     final piezasJson = json['piezas'] as List<dynamic>? ?? [];
-//     Pieza? p1, p2, p3, p4;
-//     if (piezasJson.length >= 4) {
-//       p1 = Pieza.fromJson(piezasJson[0] as Json);
-//       p2 = Pieza.fromJson(piezasJson[1] as Json);
-//       p3 = Pieza.fromJson(piezasJson[2] as Json);
-//       p4 = Pieza.fromJson(piezasJson[3] as Json);
-//     }
-//     return Ordenador(
-//       id: json['id'] as int?,
-//       tipo: json['tipo'] as String,
-//       precio: parsedPrecio,
-//       pagado: parsedPagado,
-//       procesador: p1 ?? Pieza(id: 0, nombre: '', tipo: '', precio: 0),
-//       memoria: p2 ?? Pieza(id: 0, nombre: '', tipo: '', precio: 0),
-//       almacenamiento: p3 ?? Pieza(id: 0, nombre: '', tipo: '', precio: 0),
-//       grafica: p4 ?? Pieza(id: 0, nombre: '', tipo: '', precio: 0),
-//     );
-//   }
-//
-//   Json toJson() => {
-//     'tipo': tipo,
-//     'precio': precio,
-//     'pagado': pagado,
-//     'piezas_attributes': [
-//       {'nombre': procesador.nombre, 'tipo': procesador.tipo, 'precio': procesador.precio},
-//       {'nombre': memoria.nombre, 'tipo': memoria.tipo, 'precio': memoria.precio},
-//       {'nombre': almacenamiento.nombre, 'tipo': almacenamiento.tipo, 'precio': almacenamiento.precio},
-//       {'nombre': grafica.nombre, 'tipo': grafica.tipo, 'precio': grafica.precio},
-//     ],
-//   };
-// }
 
 void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
@@ -210,7 +88,7 @@ class InicioPage extends StatelessWidget {
             child: ListTile(
               leading: Icon(Icons.desktop_windows_outlined),
               title: Text('Ordenador Gaming'),
-              subtitle: Text('Desde: 800€'),
+              subtitle: Text('Desde: 1050€'),
             ),
           ),
         ),
@@ -222,7 +100,7 @@ class InicioPage extends StatelessWidget {
             child: ListTile(
               leading: Icon(Icons.laptop_windows_outlined),
               title: Text('Ordenador Ofimatica'),
-              subtitle: Text('Desde 250€'),
+              subtitle: Text('Desde 150€'),
             ),
           ),
         ),
@@ -261,40 +139,41 @@ class _ConfigPageState extends State<ConfigPage> {
       'Gaming': OpcionesProducto(
         Icons.desktop_windows_outlined,
         [
-          CPU('Ryzen 5 9600x', 100),
-          CPU('Ryzen 7 9800x', 300),
-          CPU('Ryzen 9 9900x', 500),
+          CPU(modelo: 'Ryzen 5 9600x', precio: 100),
+          CPU(modelo: 'Ryzen 7 9800x', precio: 300),
+          CPU(modelo: 'Ryzen 9 9900x', precio: 500),
         ],
         [
-          RAM('16GB', 100),
-          RAM('32GB', 150),
+          RAM(modelo: '16GB', precio: 100),
+          RAM(modelo: '32GB', precio: 150),
         ],
         [
-          Almacenamiento('500GB', 100),
-          Almacenamiento('1TB', 100),
+          Almacenamiento(modelo: '500GB', precio: 100),
+          Almacenamiento(modelo: '1TB', precio: 200),
         ],
         [
-          GPU('RTX 5080', 300),
-          GPU('RX 9070XT', 250),
+
+          GPU(modelo: 'RX 9070XT', precio: 750),
+          GPU(modelo: 'RTX 5080', precio: 1000),
         ],
       ),
       'Ofimática': OpcionesProducto(
         Icons.laptop_windows_outlined,
         [
-          CPU('intel core i3 14100F', 60),
-          CPU('Ryzen 5 3400G', 65),
-          CPU('Ryzen 5 5600G', 130)
+          CPU(modelo: 'intel core i3 14100F', precio: 60),
+          CPU(modelo: 'Ryzen 5 3400G', precio: 65),
+          CPU(modelo: 'Ryzen 5 5600G', precio: 130)
         ],
         [
-          RAM('8GB', 50),
-          RAM('16GB', 80),
+          RAM(modelo: '8GB', precio: 50),
+          RAM(modelo: '16GB', precio: 80),
         ],
         [
-          Almacenamiento('256GB', 60),
-          Almacenamiento('512GB', 90),
+          Almacenamiento(modelo: '256GB', precio: 60),
+          Almacenamiento(modelo: '512GB', precio: 90),
         ],
         [
-          GPU('Integrada', 0),
+          GPU(modelo: 'Integrada', precio: 0),
         ],
       ),
     };
@@ -326,11 +205,11 @@ class _ConfigPageState extends State<ConfigPage> {
                   .map((pz) => DropdownMenuItem(
                 value: pz,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
-                    Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
-                  ]
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(pz.modelo, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                    ]
                 ),
               ))
                   .toList(),
@@ -346,7 +225,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text(pz.modelo, style: TextStyle(fontWeight: FontWeight.w500)),
                       Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
                     ]
                 ),
@@ -364,7 +243,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text(pz.modelo, style: TextStyle(fontWeight: FontWeight.w500)),
                       Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
                     ]
                 ),
@@ -387,7 +266,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text(pz.modelo, style: TextStyle(fontWeight: FontWeight.w500)),
                       Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
                     ]
                 ),
@@ -445,10 +324,10 @@ class _ConfigPageState extends State<ConfigPage> {
                   ordenadorBuilder = OrdenadorBaseBuilder();
                 }
                 Ordenador ordenador = ordenadorBuilder
-                    .conCPU(_opcion1.nombre, _opcion1.precio)
-                    .conRAM(_opcion2.nombre, _opcion2.precio)
-                    .conAlmacenamiento(_opcion3.nombre, _opcion3.precio)
-                    .conGPU(_opcion4.nombre, _opcion4.precio)
+                    .conCPU(_opcion1.modelo, _opcion1.precio)
+                    .conRAM(_opcion2.modelo, _opcion2.precio)
+                    .conAlmacenamiento(_opcion3.modelo, _opcion3.precio)
+                    .conGPU(_opcion4.modelo, _opcion4.precio)
                     .build();
                 if(_radioValue != 1){
                   if (_radioValue == 2) {
@@ -462,7 +341,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 final ok = await Api.createOrdenador(ordenador);
                 if (ok) {
                   ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('Pedido enviado')));
+                      .showSnackBar(SnackBar(content: Text(ordenador.jsify.toString())));
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context)
@@ -523,10 +402,10 @@ class _ListPageState extends State<ListPage> {
                     children: [
                       Text('ID: ${o.id}', style: TextStyle(fontWeight: FontWeight.bold)),
                       SizedBox(height: 8),
-                      Text('CPU: ${o.cpu.nombre}'),
-                      Text('RAM: ${o.ram.nombre}'),
-                      Text('Almacenamiento: ${o.almacenamiento.nombre}'),
-                      Text('GPU: ${o.gpu?.nombre ?? "N/A"}'),
+                      Text('CPU: ${o.cpu.modelo}'),
+                      Text('RAM: ${o.ram.modelo}'),
+                      Text('Almacenamiento: ${o.almacenamiento.modelo}'),
+                      Text('GPU: ${o.gpu?.modelo ?? "N/A"}'),
                       SizedBox(height: 8),
                       Text('Precio: \$${o.calcularPrecioFinal().toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold)),
                       Row(
