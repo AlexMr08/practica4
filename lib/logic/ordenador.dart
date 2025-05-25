@@ -29,5 +29,13 @@ class Ordenador {
     return total;
   }
 
+  void pagar() {
+    pagado = true;
+  }
+
+  bool puedoBorrar(){
+    return !pagado;
+  }
+
   double calcularPrecioFinal() => calcularPrecioSinDescuento();
 }

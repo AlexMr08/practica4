@@ -144,6 +144,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+List<Ordenador> lista = [];
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -371,6 +373,11 @@ class _ConfigPageState extends State<ConfigPage> {
               onChanged: (v) => setState(() => _opcion3 = v!),
             ),
             SizedBox(height: 16),
+            if (widget.tipo == 'Ofimática')
+              Text(
+                'Nota: La GPU integrada no se puede cambiar en ordenadores de ofimática.',
+                style: TextStyle(fontSize: 12, color: Colors.red),
+              ),
             DropdownButton<Pieza>(
               value: _opcion4,
               isExpanded: true,
@@ -437,7 +444,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 } else {
                   ordenadorBuilder = OrdenadorBaseBuilder();
                 }
-                Ordenador ordenador = OrdenadorBuilder()
+                Ordenador ordenador = ordenadorBuilder
                     .conCPU(_opcion1.nombre, _opcion1.precio)
                     .conRAM(_opcion2.nombre, _opcion2.precio)
                     .conAlmacenamiento(_opcion3.nombre, _opcion3.precio)
@@ -453,6 +460,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   }
                 }
                 //await _api.createOrdenador(nuevo);
+                lista.add(ordenador);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -480,7 +488,7 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   //final Api _api = Api();
-  late Future<List<Ordenador>> _future;
+  Future<List<Ordenador>> _future = Future.value([]);
 
   @override
   void initState() {
@@ -503,20 +511,61 @@ class _ListPageState extends State<ListPage> {
           if (snap.hasError) {
             return Center(child: Text('Error: ${snap.error}'));
           }
-          final list = snap.data!;
+          //final list = snap.data!;
+          final list = lista;
           return ListView(
             children: list.map((o) {
-              return ListTile(
-                title: Text('${o.id} #${o.id}'),
-                subtitle: Text('Pago: ${o.pagado ? 'Sí' : 'No'} - Precio: \$${o.calcularPrecioFinal().toStringAsFixed(2)}'),
-                trailing: Switch(
-                  value: o.pagado,
-                  onChanged: (v) async {
-                    o.pagado = v;
-                    //await _api.updateOrdenador(o);
-                    //_load();
-                    setState(() {});
-                  },
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ID: ${o.id}', style: TextStyle(fontWeight: FontWeight.bold)),
+                      SizedBox(height: 8),
+                      Text('CPU: ${o.cpu.nombre}'),
+                      Text('RAM: ${o.ram.nombre}'),
+                      Text('Almacenamiento: ${o.almacenamiento.nombre}'),
+                      Text('GPU: ${o.gpu?.nombre ?? "N/A"}'),
+                      SizedBox(height: 8),
+                      Text('Precio: \$${o.calcularPrecioFinal().toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text('Pagado:', style: TextStyle(fontWeight: FontWeight.w500)),
+                              Switch(
+                                value: o.pagado,
+                                onChanged: o.pagado
+                                    ? null
+                                    : (v) {
+                                  setState(() {
+                                    o.pagar();
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: o.pagado
+                                ? null
+                                : () {
+                              setState(() {
+                                lista.remove(o);
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Ordenador eliminado')),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             }).toList(),
