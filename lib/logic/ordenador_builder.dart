@@ -1,5 +1,5 @@
 import 'ordenador.dart';
-import 'pieza.dart';
+import 'piezas.dart';
 
 class OrdenadorBuilder {
   double precioBase = 0.0;

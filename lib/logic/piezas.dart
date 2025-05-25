@@ -3,6 +3,24 @@ abstract class Pieza {
   final double precio;
 
   Pieza(this.nombre, this.precio);
+
+  // factory Pieza.fromJson(Json json) {
+  //   final rawPrecio = json['precio'];
+  //   double parsedPrecio;
+  //   if (rawPrecio is num) {
+  //     parsedPrecio = rawPrecio.toDouble();
+  //   } else if (rawPrecio is String) {
+  //     parsedPrecio = double.tryParse(rawPrecio) ?? 0.0;
+  //   } else {
+  //     parsedPrecio = 0.0;
+  //   }
+  //   return Pieza(
+  //     nombre: json['nombre'] as String,
+  //     tipo: json['tipo'] as String,
+  //     precio: parsedPrecio,
+  //   );
+  // }
+
 }
 
 class CPU extends Pieza {
