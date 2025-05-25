@@ -30,15 +30,36 @@ class Ordenador {
   }
 
   bool pagar() {
-    if(pagado)
-      return false; // Ya pagado, no se puede pagar de nuevo
+    if (pagado) return false;
     pagado = true;
     return true;
   }
 
-  bool puedoBorrar(){
-    return !pagado;
-  }
+  bool puedoBorrar() => !pagado;
 
   double calcularPrecioFinal() => calcularPrecioSinDescuento();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'cpu': cpu.toJson(),
+      'ram': ram.toJson(),
+      'almacenamiento': almacenamiento.toJson(),
+      'gpu': gpu?.toJson(), // puede ser null
+      'precioBase': precioBase,
+      'id': id,
+      'pagado': pagado,
+    };
+  }
+
+  factory Ordenador.fromJson(Map<String, dynamic> json) {
+    return Ordenador(
+      cpu: CPU.fromJson(json['cpu']),
+      ram: RAM.fromJson(json['ram']),
+      almacenamiento: Almacenamiento.fromJson(json['almacenamiento']),
+      gpu: json['gpu'] != null ? GPU.fromJson(json['gpu']) : null,
+      precioBase: (json['precioBase'] as num).toDouble(),
+      id: json['id'],
+      pagado: json['pagado'] ?? false,
+    );
+  }
 }

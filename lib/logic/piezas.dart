@@ -23,18 +23,97 @@ abstract class Pieza {
 
 }
 
-class CPU extends Pieza {
-  CPU(String nombre, double precio) : super(nombre, precio);
+class CPU {
+  final String modelo;
+  final double precio;
+
+  CPU({required this.modelo, required this.precio});
+
+  factory CPU.fromJson(Map<String, dynamic> json) {
+    return CPU(
+      modelo: json['modelo'],
+      precio: (json['precio'] as num).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'modelo': modelo,
+      'precio': precio,
+    };
+  }
 }
 
-class RAM extends Pieza {
-  RAM(String nombre, double precio) : super(nombre, precio);
+
+class RAM {
+  final String capacidad;
+  final double precio;
+
+  RAM({required this.capacidad, required this.precio});
+
+  factory RAM.fromJson(Map<String, dynamic> json) {
+    return RAM(
+      capacidad: json['capacidad'],
+      precio: (json['precio'] as num).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'capacidad': capacidad,
+      'precio': precio,
+    };
+  }
 }
 
-class Almacenamiento extends Pieza {
-  Almacenamiento(String nombre, double precio) : super(nombre, precio);
+
+class Almacenamiento {
+  final String tipo;
+  final String capacidad;
+  final double precio;
+
+  Almacenamiento({
+    required this.tipo,
+    required this.capacidad,
+    required this.precio,
+  });
+
+  factory Almacenamiento.fromJson(Map<String, dynamic> json) {
+    return Almacenamiento(
+      tipo: json['tipo'],
+      capacidad: json['capacidad'],
+      precio: (json['precio'] as num).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'tipo': tipo,
+      'capacidad': capacidad,
+      'precio': precio,
+    };
+  }
 }
 
-class GPU extends Pieza {
-  GPU(String nombre, double precio) : super(nombre, precio);
+
+class GPU {
+  final String modelo;
+  final double precio;
+
+  GPU({required this.modelo, required this.precio});
+
+  factory GPU.fromJson(Map<String, dynamic> json) {
+    return GPU(
+      modelo: json['modelo'],
+      precio: (json['precio'] as num).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'modelo': modelo,
+      'precio': precio,
+    };
+  }
 }
+
