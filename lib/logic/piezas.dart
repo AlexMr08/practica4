@@ -23,7 +23,7 @@ abstract class Pieza {
 
 }
 
-class CPU {
+class CPU extends Pieza {
   final String modelo;
   final double precio;
 
@@ -45,7 +45,7 @@ class CPU {
 }
 
 
-class RAM {
+class RAM extends Pieza {
   final String capacidad;
   final double precio;
 
@@ -67,7 +67,7 @@ class RAM {
 }
 
 
-class Almacenamiento {
+class Almacenamiento extends Pieza {
   final String tipo;
   final String capacidad;
   final double precio;
@@ -96,7 +96,7 @@ class Almacenamiento {
 }
 
 
-class GPU {
+class GPU extends Pieza {
   final String modelo;
   final double precio;
 
