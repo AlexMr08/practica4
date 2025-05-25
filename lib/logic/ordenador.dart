@@ -48,6 +48,7 @@ class Ordenador {
       'precioBase': precioBase,
       'id': id,
       'pagado': pagado,
+      'precioFinal': calcularPrecioFinal(),
     };
   }
 
