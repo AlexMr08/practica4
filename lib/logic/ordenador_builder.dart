@@ -9,23 +9,23 @@ class OrdenadorBuilder {
   Almacenamiento? _almacenamiento;
   GPU? _gpu;
 
-  OrdenadorBuilder conCPU(String nombre, double precio) {
-    _cpu = CPU(nombre, precio);
+  OrdenadorBuilder conCPU(String modelo, double precio) {
+    _cpu = CPU(modelo: modelo, precio: precio);
     return this;
   }
 
-  OrdenadorBuilder conRAM(String nombre, double precio) {
-    _ram = RAM(nombre, precio);
+  OrdenadorBuilder conRAM(String modelo, double precio) {
+    _ram = RAM(modelo: modelo, precio: precio);
     return this;
   }
 
-  OrdenadorBuilder conAlmacenamiento(String nombre, double precio) {
-    _almacenamiento = Almacenamiento(nombre, precio);
+  OrdenadorBuilder conAlmacenamiento(String modelo, double precio) {
+    _almacenamiento = Almacenamiento(modelo: modelo, precio: precio);
     return this;
   }
 
-  OrdenadorBuilder conGPU(String nombre, double precio) {
-    _gpu = GPU(nombre, precio);
+  OrdenadorBuilder conGPU(String modelo, double precio) {
+    _gpu = GPU(modelo: modelo, precio: precio);
     return this;
   }
 
