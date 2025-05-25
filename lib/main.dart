@@ -247,6 +247,7 @@ class _ConfigPageState extends State<ConfigPage> {
   late Map<String, OpcionesProducto> opcionesPorProducto;
   late OpcionesProducto opciones;
   late Pieza _opcion1, _opcion2, _opcion3, _opcion4;
+  int? _radioValue = 1;
 
   @override
   void initState() {
@@ -307,45 +308,122 @@ class _ConfigPageState extends State<ConfigPage> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+            Icon(opciones.icon, size: 100),
+            SizedBox(height: 8),
+            Text(
+              widget.tipo,
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             DropdownButton<Pieza>(
               value: _opcion1,
+              isExpanded: true,
               items: opciones.opcion1
                   .map((pz) => DropdownMenuItem(
                 value: pz,
-                child: Text(pz.nombre),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                    Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                  ]
+                ),
               ))
                   .toList(),
               onChanged: (v) => setState(() => _opcion1 = v!),
             ),
+            SizedBox(height: 16),
             DropdownButton<Pieza>(
               value: _opcion2,
+              isExpanded: true,
               items: opciones.opcion2
                   .map((pz) => DropdownMenuItem(
                 value: pz,
-                child: Text(pz.nombre),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                    ]
+                ),
               ))
                   .toList(),
               onChanged: (v) => setState(() => _opcion2 = v!),
             ),
+            SizedBox(height: 16),
             DropdownButton<Pieza>(
               value: _opcion3,
+              isExpanded: true,
               items: opciones.opcion3
                   .map((pz) => DropdownMenuItem(
                 value: pz,
-                child: Text(pz.nombre),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                    ]
+                ),
               ))
                   .toList(),
               onChanged: (v) => setState(() => _opcion3 = v!),
             ),
+            SizedBox(height: 16),
             DropdownButton<Pieza>(
               value: _opcion4,
+              isExpanded: true,
               items: opciones.opcion4
                   .map((pz) => DropdownMenuItem(
                 value: pz,
-                child: Text(pz.nombre),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(pz.nombre, style: TextStyle(fontWeight: FontWeight.w500)),
+                      Text('Precio: \$${pz.precio.toStringAsFixed(2)}', style: TextStyle(fontSize: 12, color: Colors.grey[700])),
+                    ]
+                ),
               ))
                   .toList(),
               onChanged: (v) => setState(() => _opcion4 = v!),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Precio Total: \$${_opcion1.precio + _opcion2.precio + _opcion3.precio + _opcion4.precio}',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Radio<int>(
+                  value: 1,
+                  groupValue: _radioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _radioValue = value;
+                    });
+                  },
+                ),
+                Text('Sin descuento'),
+                Radio<int>(
+                  value: 2,
+                  groupValue: _radioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _radioValue = value;
+                    });
+                  },
+                ),
+                Text('Descuento de estudiantes'),
+                Radio<int>(
+                  value: 3,
+                  groupValue: _radioValue,
+                  onChanged: (value) {
+                    setState(() {
+                      _radioValue = value;
+                    });
+                  },
+                ),
+                Text('Descuento de empleado'),
+              ],
             ),
             const SizedBox(height: 24),
             ElevatedButton(
