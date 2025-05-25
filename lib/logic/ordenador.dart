@@ -1,10 +1,11 @@
 import 'package:uuid/uuid.dart';
+import 'pieza.dart';
 
 class Ordenador {
-  final String cpu;
-  final String ram;
-  final String almacenamiento;
-  final String? gpu;
+  final CPU cpu;
+  final RAM ram;
+  final Almacenamiento almacenamiento;
+  final GPU? gpu;
   final double precioBase;
   final String id;
   bool pagado;
@@ -19,7 +20,14 @@ class Ordenador {
     String? id,
   }) : id = id ?? const Uuid().v4();
 
-  double calcularPrecioSinDescuento() => precioBase;
+  double calcularPrecioSinDescuento() {
+    double total = precioBase +
+        cpu.precio +
+        ram.precio +
+        almacenamiento.precio;
+    if (gpu != null) total += gpu!.precio;
+    return total;
+  }
 
-  double calcularPrecioFinal() => precioBase;
+  double calcularPrecioFinal() => calcularPrecioSinDescuento();
 }

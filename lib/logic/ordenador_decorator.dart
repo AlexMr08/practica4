@@ -1,22 +1,9 @@
 import 'ordenador.dart';
 
-abstract class OrdenadorDecorator extends Ordenador {
+abstract class DescuentoDecorator extends Ordenador {
   final Ordenador base;
 
-  @override
-  double calcularPrecioFinal();
-
-  @override
-  double calcularPrecioSinDescuento() {
-    return base.calcularPrecioSinDescuento();
-  }
-}
-
-class DescuentoPorcentaje extends Ordenador {
-  final Ordenador base;
-  final double descuento; // entre 0.0 y 1.0 (ej: 0.15 = 15%)
-
-  DescuentoDecorator(this.base, this.descuento)
+  DescuentoDecorator(this.base)
       : super(
           cpu: base.cpu,
           ram: base.ram,
@@ -28,38 +15,34 @@ class DescuentoPorcentaje extends Ordenador {
         );
 
   @override
-  double calcularPrecioFinal() {
-    return base.calcularPrecioSinDescuento() * (1 - descuento);
-  }
-
-  @override
   double calcularPrecioSinDescuento() {
     return base.calcularPrecioSinDescuento();
   }
 }
 
-class DescuentoCantidad extends Ordenador {
-  final Ordenador base;
-  final double descuento;
+class DescuentoPorcentualDecorator extends DescuentoDecorator {
+  final double porcentaje; // 0.0 a 1.0
 
-  DescuentoDecorator(this.base, this.descuento)
-      : super(
-          cpu: base.cpu,
-          ram: base.ram,
-          almacenamiento: base.almacenamiento,
-          gpu: base.gpu,
-          precioBase: base.precioBase,
-          pagado: base.pagado,
-          id: base.id,
-        );
+  DescuentoPorcentualDecorator(Ordenador base, this.porcentaje)
+      : super(base);
 
   @override
   double calcularPrecioFinal() {
-    return base.calcularPrecioSinDescuento() - descuento;
+    final original = base.calcularPrecioSinDescuento();
+    return original * (1 - porcentaje);
   }
+}
+
+class DescuentoFijoDecorator extends DescuentoDecorator {
+  final double cantidadFija;
+
+  DescuentoFijoDecorator(Ordenador base, this.cantidadFija)
+      : super(base);
 
   @override
-  double calcularPrecioSinDescuento() {
-    return base.calcularPrecioSinDescuento();
+  double calcularPrecioFinal() {
+    final original = base.calcularPrecioSinDescuento();
+    final total = original - cantidadFija;
+    return total < 0 ? 0 : total; // evita precio negativo
   }
 }
