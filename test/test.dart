@@ -52,7 +52,7 @@ void main() {
     expect(_api.fetchOrdenadores(), isEmpty);
   });
 
-  test('RF4: Se pueden pagar pedidos correctamente', () {
+  test('RF4: Se pueden editar pedidos correctamente', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
@@ -83,7 +83,7 @@ void main() {
     expect(_api.fetchOrdenadores().length, 1);
   });
 
-  test('RF6: El descuento se elige correctamente (porcentual)', () {
+  test('RF6: El descuento se evalua correctamente (porcentual)', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
@@ -96,7 +96,7 @@ void main() {
         closeTo(o.calcularPrecioSinDescuento() * 0.9, 0.01));
   });
 
-  test('RF6: El descuento se elige correctamente (fijo)', () {
+  test('RF6: El descuento se evalua correctamente (fijo)', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
