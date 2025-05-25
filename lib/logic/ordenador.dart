@@ -29,8 +29,11 @@ class Ordenador {
     return total;
   }
 
-  void pagar() {
+  bool pagar() {
+    if(pagado)
+      return false; // Ya pagado, no se puede pagar de nuevo
     pagado = true;
+    return true;
   }
 
   bool puedoBorrar(){
