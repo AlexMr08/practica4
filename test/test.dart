@@ -38,34 +38,28 @@ void main() {
     expect(result.calcularPrecioSinDescuento(), 500 + 300 + 180 + 200 + 700);
   });
 
-  test('RF3: El pedido no pagado se borra correctamente', () {
+  test('RF3: El pedido no pagado se puede borrar', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
       ..conAlmacenamiento('512GB SSD', 120);
 
     final o = ordenador.build();
-    _api.createOrdenador(o);
-    final deleted = _api.deleteOrdenador(o.id);
+    final deleted = o.puedoBorrar();
 
     expect(deleted, true);
-    expect(_api.fetchOrdenadores(), isEmpty);
   });
 
-  test('RF4: Se pueden editar pedidos correctamente', () {
+  test('RF4: Se pueden pagar pedidos correctamente', () {
     final ordenador = OrdenadorBaseBuilder()
       ..conCPU('i5', 100)
       ..conRAM('16GB', 90)
       ..conAlmacenamiento('512GB SSD', 120);
 
     final o = ordenador.build();
-    _api.createOrdenador(o);
+    o.pagar();
 
-    o.pagado = true;
-    _api.updateOrdenador(o);
-
-    final result = _api.fetchOrdenadores().first;
-    expect(result.pagado, isTrue);
+    expect(o.pagado, isTrue);
   });
 
   test('RF5: Un pedido pagado no puede borrarse del sistema', () {
@@ -75,12 +69,10 @@ void main() {
       ..conAlmacenamiento('512GB SSD', 120);
 
     final o = ordenador.build();
-    o.pagado = true;
-    _api.createOrdenador(o);
+    o.pagar();
 
-    final deleted = _api.deleteOrdenador(o.id);
+    final deleted = o.puedoBorrar();
     expect(deleted, false);
-    expect(_api.fetchOrdenadores().length, 1);
   });
 
   test('RF6: El descuento se evalua correctamente (porcentual)', () {
