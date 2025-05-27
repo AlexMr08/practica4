@@ -1,4 +1,6 @@
-import 'dart:js_interop';
+
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:practica4/logic/ordenador_builder.dart';
@@ -35,9 +37,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _paginaActual = 0;
-
-  final List<Widget> _pages = [InicioPage(), ListPage()];
-
+  final GlobalKey<_ListPageState> _listKey = GlobalKey<_ListPageState>();
+  late final List<Widget> _pages = [
+      InicioPage(),
+      ListPage(key: _listKey),
+    ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,9 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         onTap: (int index) {
-          setState(() {
-            _paginaActual = index;
-          });
+          setState(() => _paginaActual = index);
+
+                    if (index == 1) {
+                      _listKey.currentState?._load();
+                    }
         },
       ),
     );
@@ -340,9 +346,10 @@ class _ConfigPageState extends State<ConfigPage> {
                 }
                 final ok = await Api.createOrdenador(ordenador);
                 if (ok) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(ordenador.jsify.toString())));
-                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(content: Text('Pedido enviado correctamente')),
+                                        );
+                                   Navigator.pop(context, true);
                 } else {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text('Error al enviar pedido')));
@@ -358,23 +365,26 @@ class _ConfigPageState extends State<ConfigPage> {
 }
 
 class ListPage extends StatefulWidget {
-  const ListPage({super.key});
+  const ListPage({Key? key}) : super(key: key);
   @override
   State<ListPage> createState() => _ListPageState();
 }
 
 class _ListPageState extends State<ListPage> {
-  //final Api _api = Api();
-  Future<List<Ordenador>> _future = Future.value([]);
+    late Future<List<Ordenador>> _future;
 
-  @override
-  void initState() {
-    super.initState();
-    //_load();
-  }
+    @override
+    void initState() {
+      super.initState();
+      _load();
+    }
 
-  //void _load() => _future = _api.fetchOrdenadores();
-
+    /// Carga (o recarga) la lista desde la API.
+    void _load() {
+      setState(() {
+        _future = Api.fetchOrdenadores();
+      });
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -389,7 +399,7 @@ class _ListPageState extends State<ListPage> {
             return Center(child: Text('Error: ${snap.error}'));
           }
           //final list = snap.data!;
-          final list = lista;
+          final list = snap.data!;
           return ListView(
             children: list.map((o) {
               return Card(

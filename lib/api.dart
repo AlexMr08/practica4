@@ -4,17 +4,18 @@ import 'logic/ordenador.dart';
 
 class Api {
   // Ajusta la URL a la de tu servidor
-  static const _baseUrl = 'http://TU_SERVIDOR/api/ordenadores';
+  static const _baseUrl = 'http://localhost:3000/api/ordenadores';
 
   /// Crea un nuevo pedido
   static Future<bool> createOrdenador(Ordenador o) async {
-    final uri = Uri.parse(_baseUrl);
-    final response = await http.post(
-      uri,
+    final res = await http.post(
+      Uri.parse(_baseUrl),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'ordenador': o.toJson()}),
+      body: jsonEncode({
+        'ordenador': o.toJson(),
+      }),
     );
-    return response.statusCode == 201;
+    return res.statusCode == 201;
   }
 
   /// Recupera todos los pedidos
